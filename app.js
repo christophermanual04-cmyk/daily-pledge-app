@@ -12,7 +12,6 @@ let state = loadState();
 let activeView = "today";
 let visibleMonth = new Date();
 let deferredInstallPrompt = null;
-let pledgeExpanded = false;
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => Array.from(document.querySelectorAll(selector));
@@ -21,7 +20,10 @@ const els = {
   dateLabel: $("#dateLabel"),
   installButton: $("#installButton"),
   pledgeText: $("#pledgeText"),
-  togglePledgeButton: $("#togglePledgeButton"),
+  openPledgeReaderButton: $("#openPledgeReaderButton"),
+  pledgeReader: $("#pledgeReader"),
+  pledgeReaderText: $("#pledgeReaderText"),
+  closePledgeReaderButton: $("#closePledgeReaderButton"),
   whyText: $("#whyText"),
   completeButton: $("#completeButton"),
   streakCount: $("#streakCount"),
@@ -152,10 +154,9 @@ function render() {
   els.dateLabel.textContent = shortDate(today);
   els.pledgeText.textContent = hasPledge ? state.pledge : "Choose a pledge to begin.";
   els.pledgeText.classList.toggle("is-long", isLongPledge);
-  els.pledgeText.classList.toggle("is-collapsed", isLongPledge && !pledgeExpanded);
-  els.togglePledgeButton.hidden = !isLongPledge;
-  els.togglePledgeButton.textContent = pledgeExpanded ? "Show less" : "Show full pledge";
-  els.togglePledgeButton.setAttribute("aria-expanded", String(pledgeExpanded));
+  els.pledgeText.classList.toggle("is-collapsed", isLongPledge);
+  els.openPledgeReaderButton.hidden = !isLongPledge;
+  els.pledgeReaderText.textContent = state.pledge;
   els.whyText.textContent = state.why ? state.why : "";
   els.whyText.hidden = !state.why;
   els.completeButton.disabled = !hasPledge;
@@ -323,10 +324,26 @@ function savePledge(event) {
   state.pledge = pledge;
   state.why = els.whyInput.value.trim();
   state.createdAt ||= new Date().toISOString();
-  pledgeExpanded = false;
   saveState();
   setActiveView("today");
   showToast("Pledge saved.");
+}
+
+function openPledgeReader() {
+  if (!state.pledge.trim()) {
+    return;
+  }
+
+  els.pledgeReaderText.textContent = state.pledge;
+  els.pledgeReader.hidden = false;
+  document.body.classList.add("reader-open");
+  requestAnimationFrame(() => els.pledgeReaderText.focus());
+}
+
+function closePledgeReader() {
+  els.pledgeReader.hidden = true;
+  document.body.classList.remove("reader-open");
+  els.openPledgeReaderButton.focus();
 }
 
 function createCalendarReminder() {
@@ -482,9 +499,17 @@ els.installButton.addEventListener("click", async () => {
 });
 
 els.completeButton.addEventListener("click", () => toggleCompletion());
-els.togglePledgeButton.addEventListener("click", () => {
-  pledgeExpanded = !pledgeExpanded;
-  render();
+els.openPledgeReaderButton.addEventListener("click", openPledgeReader);
+els.closePledgeReaderButton.addEventListener("click", closePledgeReader);
+els.pledgeReader.addEventListener("click", (event) => {
+  if (event.target === els.pledgeReader) {
+    closePledgeReader();
+  }
+});
+window.addEventListener("keydown", (event) => {
+  if (event.key === "Escape" && !els.pledgeReader.hidden) {
+    closePledgeReader();
+  }
 });
 els.saveNoteButton.addEventListener("click", saveNote);
 els.undoTodayButton.addEventListener("click", () => toggleCompletion());
