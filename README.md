@@ -37,13 +37,13 @@ After signing in with GitHub CLI:
 ```sh
 gh auth login
 gh repo create daily-pledge-app --public --source=. --remote=origin --push
-gh api -X POST repos/:owner/daily-pledge-app/pages -f source.branch=main -f source.path=/
+gh api --method POST repos/christophermanual04-cmyk/daily-pledge-app/pages -F 'source[branch]=main' -F 'source[path]=/'
 ```
 
 Your app will be available at:
 
 ```text
-https://YOUR-GITHUB-USERNAME.github.io/daily-pledge-app/
+https://christophermanual04-cmyk.github.io/daily-pledge-app/
 ```
 
 ## Data
