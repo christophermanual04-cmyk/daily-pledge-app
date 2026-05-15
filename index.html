@@ -39,6 +39,7 @@
               </span>
               <p class="pledge-text" id="pledgeText">Choose a pledge to begin.</p>
             </div>
+            <button class="text-action" id="togglePledgeButton" type="button" aria-expanded="false" hidden>Show full pledge</button>
             <p class="why-text" id="whyText"></p>
             <button class="primary-action" id="completeButton" type="button">
               <svg aria-hidden="true" viewBox="0 0 24 24">
@@ -110,7 +111,7 @@
             <h2>Pledge</h2>
             <form id="pledgeForm">
               <label for="pledgeInput">Daily pledge</label>
-              <textarea id="pledgeInput" rows="4" maxlength="180" required></textarea>
+              <textarea id="pledgeInput" rows="8" maxlength="3000" required></textarea>
 
               <label for="whyInput">Reason</label>
               <input id="whyInput" type="text" maxlength="120" />

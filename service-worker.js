@@ -1,4 +1,4 @@
-const CACHE_NAME = "daily-pledge-v2";
+const CACHE_NAME = "daily-pledge-v3";
 const ASSETS = [
   "./",
   "./index.html",

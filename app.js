@@ -12,6 +12,7 @@ let state = loadState();
 let activeView = "today";
 let visibleMonth = new Date();
 let deferredInstallPrompt = null;
+let pledgeExpanded = false;
 
 const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => Array.from(document.querySelectorAll(selector));
@@ -20,6 +21,7 @@ const els = {
   dateLabel: $("#dateLabel"),
   installButton: $("#installButton"),
   pledgeText: $("#pledgeText"),
+  togglePledgeButton: $("#togglePledgeButton"),
   whyText: $("#whyText"),
   completeButton: $("#completeButton"),
   streakCount: $("#streakCount"),
@@ -144,10 +146,16 @@ function render() {
   const todayKey = keyFor(today);
   const todayRecord = state.completions[todayKey];
   const hasPledge = state.pledge.trim().length > 0;
+  const isLongPledge = state.pledge.length > 220 || state.pledge.includes("\n");
   const stats = computeStats();
 
   els.dateLabel.textContent = shortDate(today);
   els.pledgeText.textContent = hasPledge ? state.pledge : "Choose a pledge to begin.";
+  els.pledgeText.classList.toggle("is-long", isLongPledge);
+  els.pledgeText.classList.toggle("is-collapsed", isLongPledge && !pledgeExpanded);
+  els.togglePledgeButton.hidden = !isLongPledge;
+  els.togglePledgeButton.textContent = pledgeExpanded ? "Show less" : "Show full pledge";
+  els.togglePledgeButton.setAttribute("aria-expanded", String(pledgeExpanded));
   els.whyText.textContent = state.why ? state.why : "";
   els.whyText.hidden = !state.why;
   els.completeButton.disabled = !hasPledge;
@@ -315,6 +323,7 @@ function savePledge(event) {
   state.pledge = pledge;
   state.why = els.whyInput.value.trim();
   state.createdAt ||= new Date().toISOString();
+  pledgeExpanded = false;
   saveState();
   setActiveView("today");
   showToast("Pledge saved.");
@@ -473,6 +482,10 @@ els.installButton.addEventListener("click", async () => {
 });
 
 els.completeButton.addEventListener("click", () => toggleCompletion());
+els.togglePledgeButton.addEventListener("click", () => {
+  pledgeExpanded = !pledgeExpanded;
+  render();
+});
 els.saveNoteButton.addEventListener("click", saveNote);
 els.undoTodayButton.addEventListener("click", () => toggleCompletion());
 els.pledgeForm.addEventListener("submit", savePledge);
