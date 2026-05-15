@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#f6f3e8" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Daily Pledge" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <title>Daily Pledge</title>
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="assets/icon-192.png" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow" id="dateLabel">Today</p>
+          <h1>Daily Pledge</h1>
+        </div>
+        <button class="icon-button" id="installButton" type="button" aria-label="Install app" hidden>
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <path d="M12 3v12m0 0 4-4m-4 4-4-4" />
+            <path d="M5 21h14" />
+          </svg>
+        </button>
+      </header>
+
+      <main>
+        <section class="view is-active" id="todayView" data-view="today" aria-label="Today">
+          <section class="pledge-panel">
+            <div class="pledge-head">
+              <span class="pledge-mark" aria-hidden="true">
+                <svg viewBox="0 0 24 24">
+                  <path d="M20 7 9 18l-5-5" />
+                </svg>
+              </span>
+              <p class="pledge-text" id="pledgeText">Choose a pledge to begin.</p>
+            </div>
+            <p class="why-text" id="whyText"></p>
+            <button class="primary-action" id="completeButton" type="button">
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d="M20 6 9 17l-5-5" />
+              </svg>
+              <span>Complete today</span>
+            </button>
+          </section>
+
+          <section class="stats-grid" aria-label="Progress">
+            <article class="stat-tile">
+              <span>Streak</span>
+              <strong id="streakCount">0</strong>
+            </article>
+            <article class="stat-tile">
+              <span>Best</span>
+              <strong id="bestCount">0</strong>
+            </article>
+            <article class="stat-tile">
+              <span>Total</span>
+              <strong id="totalCount">0</strong>
+            </article>
+          </section>
+
+          <section class="week-panel" aria-label="This week">
+            <div class="section-title">
+              <h2>This Week</h2>
+            </div>
+            <div class="week-strip" id="weekStrip"></div>
+          </section>
+
+          <section class="reflection-panel">
+            <label for="reflectionInput">Today's note</label>
+            <textarea id="reflectionInput" rows="4" maxlength="360" placeholder="A few words from today"></textarea>
+            <div class="inline-actions">
+              <button class="secondary-action" id="saveNoteButton" type="button">
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z" />
+                  <path d="M17 21v-8H7v8" />
+                  <path d="M7 3v5h8" />
+                </svg>
+                <span>Save note</span>
+              </button>
+              <button class="ghost-action" id="undoTodayButton" type="button">Undo</button>
+            </div>
+          </section>
+        </section>
+
+        <section class="view" id="historyView" data-view="history" aria-label="History">
+          <div class="section-title month-title">
+            <button class="icon-button small" id="prevMonthButton" type="button" aria-label="Previous month">
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d="m15 18-6-6 6-6" />
+              </svg>
+            </button>
+            <h2 id="monthLabel">Month</h2>
+            <button class="icon-button small" id="nextMonthButton" type="button" aria-label="Next month">
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d="m9 18 6-6-6-6" />
+              </svg>
+            </button>
+          </div>
+          <div class="calendar-grid" id="monthGrid" aria-label="Completion calendar"></div>
+          <div class="history-list" id="historyList"></div>
+        </section>
+
+        <section class="view" id="settingsView" data-view="settings" aria-label="Settings">
+          <section class="form-panel">
+            <h2>Pledge</h2>
+            <form id="pledgeForm">
+              <label for="pledgeInput">Daily pledge</label>
+              <textarea id="pledgeInput" rows="4" maxlength="180" required></textarea>
+
+              <label for="whyInput">Reason</label>
+              <input id="whyInput" type="text" maxlength="120" />
+
+              <button class="primary-action" type="submit">
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z" />
+                  <path d="M17 21v-8H7v8" />
+                  <path d="M7 3v5h8" />
+                </svg>
+                <span>Save pledge</span>
+              </button>
+            </form>
+          </section>
+
+          <section class="form-panel">
+            <h2>Reminder</h2>
+            <label for="reminderTime">Time</label>
+            <input id="reminderTime" type="time" />
+            <button class="secondary-action" id="calendarButton" type="button">
+              <svg aria-hidden="true" viewBox="0 0 24 24">
+                <path d="M8 2v4" />
+                <path d="M16 2v4" />
+                <path d="M3 10h18" />
+                <rect x="3" y="4" width="18" height="18" rx="2" />
+              </svg>
+              <span>Calendar reminder</span>
+            </button>
+          </section>
+
+          <section class="form-panel">
+            <h2>Data</h2>
+            <div class="inline-actions">
+              <button class="secondary-action" id="exportButton" type="button">
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  <path d="M12 3v12" />
+                  <path d="m7 10 5 5 5-5" />
+                  <path d="M5 21h14" />
+                </svg>
+                <span>Export</span>
+              </button>
+              <label class="file-action" for="importInput">
+                <svg aria-hidden="true" viewBox="0 0 24 24">
+                  <path d="M12 21V9" />
+                  <path d="m17 14-5-5-5 5" />
+                  <path d="M5 3h14" />
+                </svg>
+                <span>Import</span>
+              </label>
+              <input id="importInput" type="file" accept="application/json,.json" hidden />
+            </div>
+            <button class="danger-action" id="clearButton" type="button">Clear data</button>
+          </section>
+        </section>
+      </main>
+
+      <nav class="bottom-nav" aria-label="Primary">
+        <button class="nav-button is-active" type="button" data-tab="today" aria-label="Today">
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <path d="M20 6 9 17l-5-5" />
+          </svg>
+          <span>Today</span>
+        </button>
+        <button class="nav-button" type="button" data-tab="history" aria-label="History">
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <path d="M3 3v18h18" />
+            <path d="m7 15 4-4 3 3 5-6" />
+          </svg>
+          <span>History</span>
+        </button>
+        <button class="nav-button" type="button" data-tab="settings" aria-label="Settings">
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" />
+            <path d="M19.4 15a1.8 1.8 0 0 0 .36 1.98l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06A1.8 1.8 0 0 0 15 19.4a1.8 1.8 0 0 0-1 .6 1.8 1.8 0 0 0-.4 1.1V21a2 2 0 0 1-4 0v-.09A1.8 1.8 0 0 0 8.6 19.4a1.8 1.8 0 0 0-1.98.36l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.8 1.8 0 0 0 4.6 15a1.8 1.8 0 0 0-.6-1 1.8 1.8 0 0 0-1.1-.4H3a2 2 0 0 1 0-4h.09A1.8 1.8 0 0 0 4.6 8.6a1.8 1.8 0 0 0-.36-1.98l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.8 1.8 0 0 0 9 4.6a1.8 1.8 0 0 0 1-.6 1.8 1.8 0 0 0 .4-1.1V3a2 2 0 0 1 4 0v.09A1.8 1.8 0 0 0 15.4 4.6a1.8 1.8 0 0 0 1.98-.36l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.8 1.8 0 0 0 19.4 9c.22.37.58.6 1 .6h.1a2 2 0 0 1 0 4h-.1a1.8 1.8 0 0 0-1 .6Z" />
+          </svg>
+          <span>Settings</span>
+        </button>
+      </nav>
+    </div>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="app.js" type="module"></script>
+  </body>
+</html>

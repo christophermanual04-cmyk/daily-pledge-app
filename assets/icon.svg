@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Daily Pledge icon">
+  <rect width="512" height="512" rx="96" fill="#f6f3e8" />
+  <path d="M112 274c0-85 63-150 144-150s144 65 144 150c0 63-34 110-81 132H193c-47-22-81-69-81-132Z" fill="#edf7f0" />
+  <path d="M176 262 234 320 346 196" fill="none" stroke="#1f6f4a" stroke-width="42" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M167 396h178" fill="none" stroke="#4056a1" stroke-width="28" stroke-linecap="round" />
+  <circle cx="366" cy="146" r="28" fill="#d66b52" />
+</svg>
